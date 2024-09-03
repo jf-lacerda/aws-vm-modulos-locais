@@ -9,8 +9,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "joaolacerda-terraform001"
-    key    = "aws-vm/terraform.tfstate"
+    bucket = "joaolacerdaremotestate96"
+    key    = "aws-vm-modulos-locais/terraform.tfstate"
     region = "us-east-1"
   }
 }
@@ -26,11 +26,10 @@ provider "aws" {
   }
 }
 
-data "terraform_remote_state" "vpc" {
-  backend = "s3"
-  config = {
-    bucket = "joaolacerda-terraform001"
-    key    = "aws-vpc/terraform.tfstate"
-    region = "us-east-1"
-  }
+module "network" {
+  source = "./network"
+
+  cidr_vpc    = "10.0.0.0/16"
+  cdir_subnet = "10.0.1.0/24"
+  environment = var.environment
 }
